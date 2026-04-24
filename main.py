@@ -114,13 +114,22 @@ class Menu:
 
     # Destroys the menu and launches the selected level in a separate process
     def _start_level(self, level_index):
-        self.root.destroy()
+        self.root.withdraw()
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        subprocess.run([
+        proc = subprocess.Popen([
             sys.executable,
             os.path.join(script_dir, "run_game.py"),
             str(level_index)
         ])
+        self._wait_for_game(proc)
+
+    def _wait_for_game(self, proc):
+        if proc.poll() is None:
+            self.root.after(200, lambda: self._wait_for_game(proc))
+        elif proc.returncode == 2:
+            self.root.deiconify()
+        else:
+            self.root.destroy()
 
     def run(self):
         self.root.mainloop()

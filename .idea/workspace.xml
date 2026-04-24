@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2235adde-4024-4407-ac40-b9dab13a75ca" name="Changes" comment="Fixing the errors in the closing">
+    <list default="true" id="2235adde-4024-4407-ac40-b9dab13a75ca" name="Changes" comment="Add a collision detection mechanism">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Maze.py" beforeDir="false" afterPath="$PROJECT_DIR$/Maze.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run_game.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_game.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -106,7 +107,7 @@
       <updated>1776921543611</updated>
       <workItem from="1776921544608" duration="2377000" />
       <workItem from="1776999851545" duration="8259000" />
-      <workItem from="1777051915120" duration="8245000" />
+      <workItem from="1777051915120" duration="10989000" />
     </task>
     <task id="LOCAL-00001" summary="intial commit">
       <option name="closed" value="true" />
@@ -164,7 +165,15 @@
       <option name="project" value="LOCAL" />
       <updated>1777056770905</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Add a collision detection mechanism">
+      <option name="closed" value="true" />
+      <created>1777064957935</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1777064957935</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -188,10 +197,11 @@
     <MESSAGE value="Edit on level 2 , 3" />
     <MESSAGE value="Add the key bindings for player movement" />
     <MESSAGE value="Fixing the errors in the closing" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixing the errors in the closing" />
+    <MESSAGE value="Add a collision detection mechanism" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add a collision detection mechanism" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/MazeGame$Maze.coverage" NAME="Maze Coverage Results" MODIFIED="1777063171818" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/MazeGame$main.coverage" NAME="main Coverage Results" MODIFIED="1777063460017" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/MazeGame$main.coverage" NAME="main Coverage Results" MODIFIED="1777067297523" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

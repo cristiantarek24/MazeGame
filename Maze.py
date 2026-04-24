@@ -11,6 +11,17 @@ class Pen(turtle.Turtle):
         self.speed(0)
 
 
+# Gold circle that marks the exit / win condition
+class EndPoint(turtle.Turtle):
+    def __init__(self):
+        super().__init__()
+        self.shape("circle")
+        self.color("gold")
+        self.shapesize(1.0, 1.0)
+        self.penup()
+        self.speed(0)
+
+
 # Represents the player character on the maze grid
 class Player(turtle.Turtle):
     SHAPE = "square"
@@ -48,6 +59,7 @@ class Player(turtle.Turtle):
         if self._can_move(new_x, self.ycor(), walls):
             self.goto(new_x, self.ycor())
 
+
 # Holds a maze grid and converts it to turtle screen coordinates
 class Level:
     CELL_SIZE = 24
@@ -55,24 +67,35 @@ class Level:
     def __init__(self, grid):
         self.grid = grid
         self.walls = set()
+        self.endpoint = None
+        self.start = None
 
-    def draw(self, pen, player=None):
+    def draw(self, pen, player=None, endpoint_turtle=None):
         self.walls.clear()
         for y, row in enumerate(self.grid):
             for x, char in enumerate(row):
                 screen_x = -288 + (x * self.CELL_SIZE)
                 screen_y = 288 - (y * self.CELL_SIZE)
+
                 if char == "X":
                     pen.goto(screen_x, screen_y)
                     pen.stamp()
                     self.walls.add((round(screen_x), round(screen_y)))
-                if char == "P" and player is not None:
+
+                elif char == "P" and player is not None:
+                    self.start = (round(screen_x), round(screen_y))
                     player.goto(screen_x, screen_y)
+
+                elif char == "E":
+                    self.endpoint = (round(screen_x), round(screen_y))
+                    if endpoint_turtle is not None:
+                        endpoint_turtle.goto(screen_x, screen_y)
+
+
 walls = []
 
 
-
-# All playable levels; index matches the button order in the menu
+# All playable levels; 'E' marks the gold-circle exit point
 levels = [
     Level([
         "XXXXXXXXXXXXXXXXXXXXXXXXX",
@@ -99,7 +122,7 @@ levels = [
         "XXXXXXXX    XXXXXXXXXX  X",
         "X      X    X           X",
         "X      XXXXXX           X",
-        "X                       X",
+        "X                     E X",
         "XXXXXXXXXXXXXXXXXXXXXXXXX",
     ]),
     Level([
@@ -126,7 +149,7 @@ levels = [
         "X XXXXXXXX XXXXXX       X",
         "X        X       X X    X",
         "X XXXXXXXX XXXXX X XXXX X",
-        "X          X     X      X",
+        "X          X     X    E X",
         "XXXXXXXXXXXXXXXXXXXXXXXXX",
     ]),
     Level([
@@ -153,8 +176,7 @@ levels = [
         "X XXXX X XXXX X XXXX X  X",
         "X    X X    X X    X X  X",
         "X XXXX X XXXX X XXXX X  X",
-        "X            X     X    X",
+        "X            X     X  E X",
         "XXXXXXXXXXXXXXXXXXXXXXXXX",
     ]),
 ]
-
