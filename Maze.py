@@ -5,14 +5,28 @@ class Pen(turtle.Turtle):
     def __init__(self):
         super().__init__()
         self.penup()
-        self.shape("turtle")
+        self.shape("square")
         self.color("white")
         self.speed(0)
+
+
+class Player(turtle.Turtle):
+    SHAPE = "square"
+    COLOR = "blue"
+
+    def __init__(self):
+        super().__init__()
+        self._configure_appearance()
+
+    def _configure_appearance(self):
+        self.shape(self.SHAPE)
+        self.color(self.COLOR)
+        self.penup()
 
 # Create the levels
 level1 = [
     "XXXXXXXXXXXXXXXXXXXXXXXXX",
-    "X  X    X               X",
+    "XP  X    X              X",
     "X  X    X               X",
     "X  X    X               X",
     "X       XXXXXXXXXXXXX   X",
@@ -41,7 +55,7 @@ level1 = [
 
 levels = [level1]
 
-def level_setup(level, pen):
+def level_setup(level, pen, player=None):
     for y in range(len(level)):
         for x in range(len(level[y])):
             character = level[y][x]
@@ -52,3 +66,8 @@ def level_setup(level, pen):
             if character == "X":
                 pen.goto(screen_x, screen_y)
                 pen.stamp()
+            if character == "P" and player is not None:
+                player.goto(screen_x, screen_y)
+
+pen = Pen()
+
