@@ -1,6 +1,7 @@
 import turtle
 
-# Create the pen to draw
+
+# Turtle used exclusively for stamping wall tiles; never draws lines
 class Pen(turtle.Turtle):
     def __init__(self):
         super().__init__()
@@ -10,6 +11,7 @@ class Pen(turtle.Turtle):
         self.speed(0)
 
 
+# Represents the player character on the maze grid
 class Player(turtle.Turtle):
     SHAPE = "square"
     COLOR = "blue"
@@ -23,51 +25,110 @@ class Player(turtle.Turtle):
         self.color(self.COLOR)
         self.penup()
 
-# Create the levels
-level1 = [
-    "XXXXXXXXXXXXXXXXXXXXXXXXX",
-    "XP  X    X              X",
-    "X  X    X               X",
-    "X  X    X               X",
-    "X       XXXXXXXXXXXXX   X",
-    "XXXX                X   X",
-    "X      XXXXXXXXXXXXXX   X",
-    "X   XXXX                X",
-    "X   X             X     X",
-    "X   X             X     X",
-    "X   X             X     X",
-    "X   XXXXXXX       XXX   X",
-    "X         X         X   X",
-    "X   XXXXXXXXXXX     X   X",
-    "X             X     X   X",
-    "X   XXXXXXXXXXX     X   X",
-    "X   X             XXXX  X",
-    "X   XXXXXXXXXXX      X  X",
-    "X             X      X  X",
-    "X    XXXXXXXXXX      X  X",
-    "X                    X  X",
-    "XXXXXXXX    XXXXXXXXXX  X",
-    "X      X    X           X",
-    "X      XXXXXX           X",
-    "X                       X",
-    "XXXXXXXXXXXXXXXXXXXXXXXXX"
+
+# Holds a maze grid and converts it to turtle screen coordinates
+class Level:
+    CELL_SIZE = 24  # pixels per grid cell
+
+    def __init__(self, grid):
+        self.grid = grid
+
+    # 'X' = wall tile, 'P' = player start position, ' ' = open path
+    def draw(self, pen, player=None):
+        for y, row in enumerate(self.grid):
+            for x, char in enumerate(row):
+                # Origin (-288, 288) centers a 25×26 grid in the 700×700 window
+                screen_x = -288 + (x * self.CELL_SIZE)
+                screen_y = 288 - (y * self.CELL_SIZE)
+                if char == "X":
+                    pen.goto(screen_x, screen_y)
+                    pen.stamp()
+                if char == "P" and player is not None:
+                    player.goto(screen_x, screen_y)
+
+
+# All playable levels; index matches the button order in the menu
+levels = [
+    Level([
+        "XXXXXXXXXXXXXXXXXXXXXXXXX",
+        "XP  X    X              X",
+        "X  X    X               X",
+        "X  X    X               X",
+        "X       XXXXXXXXXXXXX   X",
+        "XXXX                X   X",
+        "X      XXXXXXXXXXXXXX   X",
+        "X   XXXX                X",
+        "X   X             X     X",
+        "X   X             X     X",
+        "X   X             X     X",
+        "X   XXXXXXX       XXX   X",
+        "X         X         X   X",
+        "X   XXXXXXXXXXX     X   X",
+        "X             X     X   X",
+        "X   XXXXXXXXXXX     X   X",
+        "X   X             XXXX  X",
+        "X   XXXXXXXXXXX      X  X",
+        "X             X      X  X",
+        "X    XXXXXXXXXX      X  X",
+        "X                    X  X",
+        "XXXXXXXX    XXXXXXXXXX  X",
+        "X      X    X           X",
+        "X      XXXXXX           X",
+        "X                       X",
+        "XXXXXXXXXXXXXXXXXXXXXXXXX",
+    ]),
+    Level([
+        "XXXXXXXXXXXXXXXXXXXXXXXXX",
+        "XP     X        X       X",
+        "X XXX XXXXXXXX  X  XXX  X",
+        "X X   X      X  X    X  X",
+        "X X XXXXXXXX X  X XX X  X",
+        "X X        X X  X XX X  X",
+        "X XXXXXXXX X X  X XX X  X",
+        "X        X X X  X    X  X",
+        "XXXXXXX  X X X  X XXXX  X",
+        "X     X  X X X  X    X  X",
+        "X XXX X  X X X  XXXX X  X",
+        "X X   X  X X X       X  X",
+        "X X XXXXX X X XXXXXXXX  X",
+        "X X     X X X X        X",
+        "X XXXXX X X X X XXXXXXXX",
+        "X     X X X X X        X",
+        "XXXXX X X X X XXXXXXX  X",
+        "X   X X X X X       X  X",
+        "X X X X X X XXXXXXX X  X",
+        "X X   X   X       X X  X",
+        "X XXXXXXXX XXXXXXX X X X",
+        "X        X       X X   X",
+        "X XXXXXXXX XXXXX X XXXXX",
+        "X          X     X     X",
+        "XXXXXXXXXXXXXXXXXXXXXXXXX",
+    ]),
+    Level([
+        "XXXXXXXXXXXXXXXXXXXXXXXXX",
+        "XP   X     X     X     XX",
+        "X X XXXX X XXXX X XXXX  X",
+        "X X    X X    X X    X  X",
+        "X XXXX X XXXX X XXXX X  X",
+        "X    X X    X X    X X  X",
+        "XXXX X XXXX X XXXX X X  X",
+        "X    X    X X    X X X  X",
+        "X XXXX XXXX X XXXX X X  X",
+        "X X    X    X X    X X  X",
+        "X X XXXX XXXX X XXXX X  X",
+        "X X    X    X X    X X  X",
+        "X XXXX X XXXX X XXXX X  X",
+        "X    X X    X X    X X  X",
+        "XXXX X XXXX X XXXX X X  X",
+        "X    X    X X    X X X  X",
+        "X XXXX XXXX X XXXX X X  X",
+        "X X    X    X X    X X  X",
+        "X X XXXX XXXX X XXXX X  X",
+        "X X    X    X X    X X  X",
+        "X XXXX X XXXX X XXXX X  X",
+        "X    X X    X X    X X  X",
+        "X XXXX X XXXX X XXXX X  X",
+        "X      X     X     X    X",
+        "XXXXXXXXXXXXXXXXXXXXXXXXX",
+    ]),
 ]
-
-levels = [level1]
-
-def level_setup(level, pen, player=None):
-    for y in range(len(level)):
-        for x in range(len(level[y])):
-            character = level[y][x]
-
-            screen_x = -288 + (x * 24)
-            screen_y = 288 - (y * 24)
-
-            if character == "X":
-                pen.goto(screen_x, screen_y)
-                pen.stamp()
-            if character == "P" and player is not None:
-                player.goto(screen_x, screen_y)
-
-pen = Pen()
-
