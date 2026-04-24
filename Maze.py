@@ -25,6 +25,19 @@ class Player(turtle.Turtle):
         self.color(self.COLOR)
         self.penup()
 
+    def go_up(self):
+        self.goto(self.xcor(), self.ycor() + 24)
+
+    def go_down(self):
+        self.goto(self.xcor(), self.ycor() - 24)
+
+    def go_left(self):
+        self.goto(self.xcor() - 24, self.ycor())
+
+    def go_right(self):
+        self.goto(self.xcor() + 24, self.ycor())
+
+
 
 # Holds a maze grid and converts it to turtle screen coordinates
 class Level:

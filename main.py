@@ -22,6 +22,14 @@ class Game:
         player = Player()
         self.level.draw(pen, player)
 
+        #key bindings
+        window.listen()
+        window.onkey(player.go_up, "Up")
+        window.onkey(player.go_down, "Down")
+        window.onkey(player.go_left, "Left")
+        window.onkey(player.go_right, "Right")
+
+
         turtle.done()
 
 
