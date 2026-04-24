@@ -14,13 +14,16 @@ def main():
 
     pen = Pen()
     player = Player()
-    levels[level_index].draw(pen, player)
+    level = levels[level_index]
+    level.draw(pen, player)
 
     window.listen()
-    window.onkey(player.go_up, "Up")
-    window.onkey(player.go_down, "Down")
-    window.onkey(player.go_left, "Left")
-    window.onkey(player.go_right, "Right")
+    window.onkey(lambda: player.go_up(level.walls), "Up")
+    window.onkey(lambda: player.go_down(level.walls), "Down")
+    window.onkey(lambda: player.go_left(level.walls), "Left")
+    window.onkey(lambda: player.go_right(level.walls), "Right")
+
+
 
     turtle.done()
 

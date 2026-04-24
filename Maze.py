@@ -25,38 +25,51 @@ class Player(turtle.Turtle):
         self.color(self.COLOR)
         self.penup()
 
-    def go_up(self):
-        self.goto(self.xcor(), self.ycor() + 24)
+    def _can_move(self, x, y, walls):
+        return (round(x), round(y)) not in walls
 
-    def go_down(self):
-        self.goto(self.xcor(), self.ycor() - 24)
+    def go_up(self, walls):
+        new_y = self.ycor() + 24
+        if self._can_move(self.xcor(), new_y, walls):
+            self.goto(self.xcor(), new_y)
 
-    def go_left(self):
-        self.goto(self.xcor() - 24, self.ycor())
+    def go_down(self, walls):
+        new_y = self.ycor() - 24
+        if self._can_move(self.xcor(), new_y, walls):
+            self.goto(self.xcor(), new_y)
 
-    def go_right(self):
-        self.goto(self.xcor() + 24, self.ycor())
+    def go_left(self, walls):
+        new_x = self.xcor() - 24
+        if self._can_move(new_x, self.ycor(), walls):
+            self.goto(new_x, self.ycor())
 
+    def go_right(self, walls):
+        new_x = self.xcor() + 24
+        if self._can_move(new_x, self.ycor(), walls):
+            self.goto(new_x, self.ycor())
 
 # Holds a maze grid and converts it to turtle screen coordinates
 class Level:
-    CELL_SIZE = 24  # pixels per grid cell
+    CELL_SIZE = 24
 
     def __init__(self, grid):
         self.grid = grid
+        self.walls = set()
 
-    # 'X' = wall tile, 'P' = player start position, ' ' = open path
     def draw(self, pen, player=None):
+        self.walls.clear()
         for y, row in enumerate(self.grid):
             for x, char in enumerate(row):
-                # Origin (-288, 288) centers a 25x26 grid in the 700x700 window
                 screen_x = -288 + (x * self.CELL_SIZE)
                 screen_y = 288 - (y * self.CELL_SIZE)
                 if char == "X":
                     pen.goto(screen_x, screen_y)
                     pen.stamp()
+                    self.walls.add((round(screen_x), round(screen_y)))
                 if char == "P" and player is not None:
                     player.goto(screen_x, screen_y)
+walls = []
+
 
 
 # All playable levels; index matches the button order in the menu
@@ -144,3 +157,4 @@ levels = [
         "XXXXXXXXXXXXXXXXXXXXXXXXX",
     ]),
 ]
+
