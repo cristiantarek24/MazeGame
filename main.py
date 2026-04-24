@@ -1,16 +1,12 @@
-# This is a sample Python script.
+import turtle
+from Maze import Pen, level_setup, levels
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+window = turtle.Screen()
+window.bgcolor("black")
+window.title("Escape the Maze")
+window.setup(width=700, height=700)
 
+obj = Pen()
+level_setup(levels[0], obj)
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+window.mainloop()
