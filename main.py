@@ -1,36 +1,9 @@
 import tkinter as tk
-import turtle
+import subprocess
+import sys
+import os
 
-from Maze import Pen, Player, levels, Level
-
-
-# Manages a single turtle-based game session for one level
-class Game:
-    BG_COLOR = "#050816"
-
-    def __init__(self, level: Level):
-        self.level = level
-
-    def run(self):
-        window = turtle.Screen()
-        window.bgcolor(self.BG_COLOR)
-        window.title("Escape the Maze")
-        window.setup(width=700, height=700)
-
-        # Draw walls first, then place the player on top
-        pen = Pen()
-        player = Player()
-        self.level.draw(pen, player)
-
-        #key bindings
-        window.listen()
-        window.onkey(player.go_up, "Up")
-        window.onkey(player.go_down, "Down")
-        window.onkey(player.go_left, "Left")
-        window.onkey(player.go_right, "Right")
-
-
-        turtle.done()
+from Maze import levels
 
 
 # Tkinter level-select menu shown before the game starts
@@ -139,10 +112,15 @@ class Menu:
         button.bind("<Enter>", lambda _: button.configure(bg=self.BUTTON_HOVER))
         button.bind("<Leave>", lambda _: button.configure(bg=self.BUTTON_BG))
 
-    # Hides the menu and launches the selected level
+    # Destroys the menu and launches the selected level in a separate process
     def _start_level(self, level_index):
-        self.root.withdraw()
-        Game(levels[level_index]).run()
+        self.root.destroy()
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        subprocess.run([
+            sys.executable,
+            os.path.join(script_dir, "run_game.py"),
+            str(level_index)
+        ])
 
     def run(self):
         self.root.mainloop()

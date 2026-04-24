@@ -38,7 +38,6 @@ class Player(turtle.Turtle):
         self.goto(self.xcor() + 24, self.ycor())
 
 
-
 # Holds a maze grid and converts it to turtle screen coordinates
 class Level:
     CELL_SIZE = 24  # pixels per grid cell
@@ -50,7 +49,7 @@ class Level:
     def draw(self, pen, player=None):
         for y, row in enumerate(self.grid):
             for x, char in enumerate(row):
-                # Origin (-288, 288) centers a 25×26 grid in the 700×700 window
+                # Origin (-288, 288) centers a 25x26 grid in the 700x700 window
                 screen_x = -288 + (x * self.CELL_SIZE)
                 screen_y = 288 - (y * self.CELL_SIZE)
                 if char == "X":

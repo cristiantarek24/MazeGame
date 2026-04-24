@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2235adde-4024-4407-ac40-b9dab13a75ca" name="Changes" comment="Edit on level 2 , 3">
+    <list default="true" id="2235adde-4024-4407-ac40-b9dab13a75ca" name="Changes" comment="Add the key bindings for player movement">
+      <change afterPath="$PROJECT_DIR$/run_game.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Maze.py" beforeDir="false" afterPath="$PROJECT_DIR$/Maze.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
@@ -106,7 +107,7 @@
       <updated>1776921543611</updated>
       <workItem from="1776921544608" duration="2377000" />
       <workItem from="1776999851545" duration="8259000" />
-      <workItem from="1777051915120" duration="3463000" />
+      <workItem from="1777051915120" duration="4779000" />
     </task>
     <task id="LOCAL-00001" summary="intial commit">
       <option name="closed" value="true" />
@@ -148,7 +149,15 @@
       <option name="project" value="LOCAL" />
       <updated>1777053043810</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Add the key bindings for player movement">
+      <option name="closed" value="true" />
+      <created>1777055576392</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1777055576392</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -170,10 +179,11 @@
     <MESSAGE value="Generate level setup (level 1)" />
     <MESSAGE value="Generate main menu and level selection system" />
     <MESSAGE value="Edit on level 2 , 3" />
-    <option name="LAST_COMMIT_MESSAGE" value="Edit on level 2 , 3" />
+    <MESSAGE value="Add the key bindings for player movement" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add the key bindings for player movement" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/MazeGame$Maze.coverage" NAME="Maze Coverage Results" MODIFIED="1777004047485" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/MazeGame$main.coverage" NAME="main Coverage Results" MODIFIED="1777055276086" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/MazeGame$main.coverage" NAME="main Coverage Results" MODIFIED="1777056700607" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
