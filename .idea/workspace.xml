@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2235adde-4024-4407-ac40-b9dab13a75ca" name="Changes" comment="Add a collision detection mechanism">
-      <change afterPath="$PROJECT_DIR$/search_algorithms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/MazeGame.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MazeGame.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="2235adde-4024-4407-ac40-b9dab13a75ca" name="Changes" comment="add BFS, DFS, and A* algorithms" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -73,6 +68,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "Python.Maze.executor": "Run",
     "Python.main.executor": "Run",
+    "Python.search_algorithms.executor": "Run",
     "RunOnceActivity.MCP Project settings loaded": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -211,7 +207,15 @@
       <option name="project" value="LOCAL" />
       <updated>1777064957935</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="add BFS, DFS, and A* algorithms">
+      <option name="closed" value="true" />
+      <created>1777135495230</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1777135495230</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -236,7 +240,8 @@
     <MESSAGE value="Add the key bindings for player movement" />
     <MESSAGE value="Fixing the errors in the closing" />
     <MESSAGE value="Add a collision detection mechanism" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add a collision detection mechanism" />
+    <MESSAGE value="add BFS, DFS, and A* algorithms" />
+    <option name="LAST_COMMIT_MESSAGE" value="add BFS, DFS, and A* algorithms" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/MazeGame$Maze.coverage" NAME="Maze Coverage Results" MODIFIED="1777063171818" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
