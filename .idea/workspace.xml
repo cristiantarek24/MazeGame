@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2235adde-4024-4407-ac40-b9dab13a75ca" name="Changes" comment="Add a collision detection mechanism">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_game.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_game.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/search_algorithms.py" beforeDir="false" afterPath="$PROJECT_DIR$/search_algorithms.py" afterDir="false" />
-    </list>
+    <list default="true" id="2235adde-4024-4407-ac40-b9dab13a75ca" name="Changes" comment="Add the search algorithms to the game" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -177,7 +173,15 @@
       <option name="project" value="LOCAL" />
       <updated>1777064957935</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Add an end point and win menu">
+      <option name="closed" value="true" />
+      <created>1777162725864</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1777162725864</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -202,11 +206,13 @@
     <MESSAGE value="Add the key bindings for player movement" />
     <MESSAGE value="Fixing the errors in the closing" />
     <MESSAGE value="Add a collision detection mechanism" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add a collision detection mechanism" />
+    <MESSAGE value="Add an end point and win menu" />
+    <MESSAGE value="Add the search algorithms to the game" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add the search algorithms to the game" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/MazeGame$Maze.coverage" NAME="Maze Coverage Results" MODIFIED="1777063171818" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/MazeGame$main.coverage" NAME="main Coverage Results" MODIFIED="1777162559113" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/MazeGame$main.coverage" NAME="main Coverage Results" MODIFIED="1777162684455" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/MazeGame$run_game.coverage" NAME="run_game Coverage Results" MODIFIED="1777162213280" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/MazeGame$search_algorithms.coverage" NAME="search_algorithms Coverage Results" MODIFIED="1777152501833" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
