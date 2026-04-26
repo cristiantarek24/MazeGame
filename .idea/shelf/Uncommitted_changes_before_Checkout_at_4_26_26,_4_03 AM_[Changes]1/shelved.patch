@@ -1,0 +1,280 @@
+Index: Maze.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import turtle\n\n\n# Turtle used exclusively for stamping wall tiles; never draws lines\nclass Pen(turtle.Turtle):\n    def __init__(self):\n        super().__init__()\n        self.penup()\n        self.shape(\"square\")\n        self.color(\"white\")\n        self.speed(0)\n\n\n# Gold circle that marks the exit / win condition\nclass EndPoint(turtle.Turtle):\n    def __init__(self):\n        super().__init__()\n        self.shape(\"circle\")\n        self.color(\"gold\")\n        self.shapesize(1.0, 1.0)\n        self.penup()\n        self.speed(0)\n\n\n# Represents the player character on the maze grid\nclass Player(turtle.Turtle):\n    SHAPE = \"square\"\n    COLOR = \"blue\"\n\n    def __init__(self):\n        super().__init__()\n        self._configure_appearance()\n\n    def _configure_appearance(self):\n        self.shape(self.SHAPE)\n        self.color(self.COLOR)\n        self.penup()\n\n    def _can_move(self, x, y, walls):\n        return (round(x), round(y)) not in walls\n\n    def go_up(self, walls):\n        new_y = self.ycor() + 24\n        if self._can_move(self.xcor(), new_y, walls):\n            self.goto(self.xcor(), new_y)\n\n    def go_down(self, walls):\n        new_y = self.ycor() - 24\n        if self._can_move(self.xcor(), new_y, walls):\n            self.goto(self.xcor(), new_y)\n\n    def go_left(self, walls):\n        new_x = self.xcor() - 24\n        if self._can_move(new_x, self.ycor(), walls):\n            self.goto(new_x, self.ycor())\n\n    def go_right(self, walls):\n        new_x = self.xcor() + 24\n        if self._can_move(new_x, self.ycor(), walls):\n            self.goto(new_x, self.ycor())\n\n\n# Holds a maze grid and converts it to turtle screen coordinates\nclass Level:\n    CELL_SIZE = 24\n\n    def __init__(self, grid):\n        self.grid = grid\n        self.walls = set()\n        self.endpoint = None\n        self.start = None\n\n    def draw(self, pen, player=None, endpoint_turtle=None):\n        self.walls.clear()\n        for y, row in enumerate(self.grid):\n            for x, char in enumerate(row):\n                screen_x = -288 + (x * self.CELL_SIZE)\n                screen_y = 288 - (y * self.CELL_SIZE)\n\n                if char == \"X\":\n                    pen.goto(screen_x, screen_y)\n                    pen.stamp()\n                    self.walls.add((round(screen_x), round(screen_y)))\n\n                elif char == \"P\" and player is not None:\n                    self.start = (round(screen_x), round(screen_y))\n                    player.goto(screen_x, screen_y)\n\n                elif char == \"E\":\n                    self.endpoint = (round(screen_x), round(screen_y))\n                    if endpoint_turtle is not None:\n                        endpoint_turtle.goto(screen_x, screen_y)\n\n\nwalls = []\n\n\n# All playable levels; 'E' marks the gold-circle exit point\nlevels = [\n    Level([\n        \"XXXXXXXXXXXXXXXXXXXXXXXXX\",\n        \"XP  X    X              X\",\n        \"X  X    X               X\",\n        \"X  X    X               X\",\n        \"X       XXXXXXXXXXXXX   X\",\n        \"XXXX                X   X\",\n        \"X      XXXXXXXXXXXXXX   X\",\n        \"X   XXXX                X\",\n        \"X   X             X     X\",\n        \"X   X             X     X\",\n        \"X   X             X     X\",\n        \"X   XXXXXXX       XXX   X\",\n        \"X         X         X   X\",\n        \"X   XXXXXXXXXXX     X   X\",\n        \"X             X     X   X\",\n        \"X   XXXXXXXXXXX     X   X\",\n        \"X   X             XXXX  X\",\n        \"X   XXXXXXXXXXX      X  X\",\n        \"X             X      X  X\",\n        \"X    XXXXXXXXXX      X  X\",\n        \"X                    X  X\",\n        \"XXXXXXXX    XXXXXXXXXX  X\",\n        \"X      X    X           X\",\n        \"X      XXXXXX           X\",\n        \"X                     E X\",\n        \"XXXXXXXXXXXXXXXXXXXXXXXXX\",\n    ]),\n    Level([\n        \"XXXXXXXXXXXXXXXXXXXXXXXXX\",\n        \"XP     X        X       X\",\n        \"X XXX XXXXXXXX  X  XXX  X\",\n        \"X X   X      X  X    X  X\",\n        \"X X XXXXXXXX X  X X  X  X\",\n        \"X X        X X  X X  X  X\",\n        \"X XXXXXXXX X X  X X  X  X\",\n        \"X        X X X  X    X  X\",\n        \"XXXXXXX  X X X  X XXXX  X\",\n        \"X     X  X X X  X    X  X\",\n        \"X XXX X  X X X  XXXX X  X\",\n        \"X X   X  X X X       X  X\",\n        \"X X XXXXX     XXXXXXXX  X\",\n        \"X X     X X X X         X\",\n        \"X XXXXX X X X X  XXXXXXXX\",\n        \"X     X X X X X         X\",\n        \"XXXXX X X X X XXXXXXX   X\",\n        \"X   X X X X X       X   X\",\n        \"X X X X X X XXXXXXX X   X\",\n        \"X X   X   X         X   X\",\n        \"X XXXXXXXX XXXXXX       X\",\n        \"X        X       X X    X\",\n        \"X XXXXXXXX XXXXX X XXXX X\",\n        \"X          X     X    E X\",\n        \"XXXXXXXXXXXXXXXXXXXXXXXXX\",\n    ]),\n    Level([\n        \"XXXXXXXXXXXXXXXXXXXXXXXXX\",\n        \"XP   X     X     X     XX\",\n        \"X X XXXX X XXXX X XXXX  X\",\n        \"X X    X      X X    X  X\",\n        \"X XXXX X XXXX XXXXXX X  X\",\n        \"X    X X    X        X  X\",\n        \"XXXX X XXXX X XXXX X X  X\",\n        \"X    X    X X    X X X  X\",\n        \"X XXXX XXXX X XXXX X X  X\",\n        \"X X    X    X X    X X  X\",\n        \"X X XXXX XXXX X XXXX X  X\",\n        \"X X    X    X X    X X  X\",\n        \"X XXXX X  XXX X XXXX X  X\",\n        \"X    X X    X X    X X  X\",\n        \"XXXX X XXXX X XXXX X X  X\",\n        \"X    X    X X    X X X  X\",\n        \"X XXXX XXXX X XXXX X X  X\",\n        \"X X    X    X X    X X  X\",\n        \"X X XXXX XXXX X XXXX X  X\",\n        \"X X    X    X X    X X  X\",\n        \"X XXXX X XXXX X XXXX X  X\",\n        \"X    X X    X X    X X  X\",\n        \"X XXXX X XXXX X XXXX X  X\",\n        \"X            X     X  E X\",\n        \"XXXXXXXXXXXXXXXXXXXXXXXXX\",\n    ]),\n]
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Maze.py b/Maze.py
+--- a/Maze.py	(revision 94d11de5abe6f8ee910e5715250e88a870b9b163)
++++ b/Maze.py	(date 1777165385951)
+@@ -1,7 +1,9 @@
+ import turtle
++import os
+ 
++BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ 
+-# Turtle used exclusively for stamping wall tiles; never draws lines
++
+ class Pen(turtle.Turtle):
+     def __init__(self):
+         super().__init__()
+@@ -11,7 +13,6 @@
+         self.speed(0)
+ 
+ 
+-# Gold circle that marks the exit / win condition
+ class EndPoint(turtle.Turtle):
+     def __init__(self):
+         super().__init__()
+@@ -22,45 +23,86 @@
+         self.speed(0)
+ 
+ 
+-# Represents the player character on the maze grid
+ class Player(turtle.Turtle):
+-    SHAPE = "square"
+-    COLOR = "blue"
+-
+     def __init__(self):
+         super().__init__()
+-        self._configure_appearance()
++
++        # المسار للفولدر - اتأكد إن المسافة موجودة زي الصورة
++        char_folder = os.path.join(BASE_DIR, "assets", "Top-Down Character")
++
++        # سطر تشخيصي: هيطبع لك المسار في الترمينال عشان تتأكد إنه صح
++        print(f"Checking assets in: {char_folder}")
++
++        self.animations = {
++            "down": {
++                "idle": os.path.join(char_folder, "elf_front_idle.gif"),
++                "walk": [os.path.join(char_folder, "elf_front_walk.gif")] +
++                        [os.path.join(char_folder, f"elf_front_walk{i}.gif") for i in range(1, 9)]
++            },
++            "up": {
++                "idle": os.path.join(char_folder, "elf_back_idle.gif"),
++                "walk": [os.path.join(char_folder, "elf_back_walk.gif")] +
++                        [os.path.join(char_folder, f"elf_back_walk{i}.gif") for i in range(1, 9)]
++            },
++            "right": {
++                "idle": os.path.join(char_folder, "elf_side01_idle.gif"),
++                "walk": [os.path.join(char_folder, "elf_side01_walk.gif")] +
++                        [os.path.join(char_folder, f"elf_side01_walk{i}.gif") for i in range(1, 9)]
++            },
++            "left": {
++                "idle": os.path.join(char_folder, "elf_side02_idle.gif"),
++                "walk": [os.path.join(char_folder, "elf_side02_walk.gif")] +
++                        [os.path.join(char_folder, f"elf_side02_walk{i}.gif") for i in range(1, 9)]
++            }
++        }
+ 
+-    def _configure_appearance(self):
+-        self.shape(self.SHAPE)
+-        self.color(self.COLOR)
++        for direction in self.animations:
++            turtle.register_shape(self.animations[direction]["idle"])
++            for f in self.animations[direction]["walk"]:
++                turtle.register_shape(f)
++
++        self.direction = "down"
++        self.frame_index = 0
++        self.shape(self.animations[self.direction]["idle"])
+         self.penup()
+ 
++    def animate_walk(self):
++        frames = self.animations[self.direction]["walk"]
++        self.frame_index = (self.frame_index + 1) % len(frames)
++        self.shape(frames[self.frame_index])
++
+     def _can_move(self, x, y, walls):
+         return (round(x), round(y)) not in walls
+ 
++    def go_right(self, walls):
++        new_x = self.xcor() + 24
++        if self._can_move(new_x, self.ycor(), walls):
++            self.direction = "right"
++            self.goto(new_x, self.ycor())
++            self.animate_walk()
++
++    def go_left(self, walls):
++        new_x = self.xcor() - 24
++        if self._can_move(new_x, self.ycor(), walls):
++            self.direction = "left"
++            self.goto(new_x, self.ycor())
++            self.animate_walk()
++
+     def go_up(self, walls):
+         new_y = self.ycor() + 24
+         if self._can_move(self.xcor(), new_y, walls):
++            self.direction = "up"
+             self.goto(self.xcor(), new_y)
++            self.animate_walk()
+ 
+     def go_down(self, walls):
+         new_y = self.ycor() - 24
+         if self._can_move(self.xcor(), new_y, walls):
++            self.direction = "down"
+             self.goto(self.xcor(), new_y)
+-
+-    def go_left(self, walls):
+-        new_x = self.xcor() - 24
+-        if self._can_move(new_x, self.ycor(), walls):
+-            self.goto(new_x, self.ycor())
++            self.animate_walk()
+ 
+-    def go_right(self, walls):
+-        new_x = self.xcor() + 24
+-        if self._can_move(new_x, self.ycor(), walls):
+-            self.goto(new_x, self.ycor())
+ 
+-
+-# Holds a maze grid and converts it to turtle screen coordinates
+ class Level:
+     CELL_SIZE = 24
+ 
+@@ -68,7 +110,6 @@
+         self.grid = grid
+         self.walls = set()
+         self.endpoint = None
+-        self.start = None
+ 
+     def draw(self, pen, player=None, endpoint_turtle=None):
+         self.walls.clear()
+@@ -76,107 +117,44 @@
+             for x, char in enumerate(row):
+                 screen_x = -288 + (x * self.CELL_SIZE)
+                 screen_y = 288 - (y * self.CELL_SIZE)
+-
+                 if char == "X":
+                     pen.goto(screen_x, screen_y)
+                     pen.stamp()
+                     self.walls.add((round(screen_x), round(screen_y)))
+-
+                 elif char == "P" and player is not None:
+-                    self.start = (round(screen_x), round(screen_y))
+                     player.goto(screen_x, screen_y)
+-
+                 elif char == "E":
+                     self.endpoint = (round(screen_x), round(screen_y))
+-                    if endpoint_turtle is not None:
++                    if endpoint_turtle:
+                         endpoint_turtle.goto(screen_x, screen_y)
+ 
+ 
+-walls = []
+-
+-
+-# All playable levels; 'E' marks the gold-circle exit point
+ levels = [
+-    Level([
+-        "XXXXXXXXXXXXXXXXXXXXXXXXX",
+-        "XP  X    X              X",
+-        "X  X    X               X",
+-        "X  X    X               X",
+-        "X       XXXXXXXXXXXXX   X",
+-        "XXXX                X   X",
+-        "X      XXXXXXXXXXXXXX   X",
+-        "X   XXXX                X",
+-        "X   X             X     X",
+-        "X   X             X     X",
+-        "X   X             X     X",
+-        "X   XXXXXXX       XXX   X",
+-        "X         X         X   X",
+-        "X   XXXXXXXXXXX     X   X",
+-        "X             X     X   X",
+-        "X   XXXXXXXXXXX     X   X",
+-        "X   X             XXXX  X",
+-        "X   XXXXXXXXXXX      X  X",
+-        "X             X      X  X",
+-        "X    XXXXXXXXXX      X  X",
+-        "X                    X  X",
+-        "XXXXXXXX    XXXXXXXXXX  X",
+-        "X      X    X           X",
+-        "X      XXXXXX           X",
+-        "X                     E X",
+-        "XXXXXXXXXXXXXXXXXXXXXXXXX",
+-    ]),
+-    Level([
+-        "XXXXXXXXXXXXXXXXXXXXXXXXX",
+-        "XP     X        X       X",
+-        "X XXX XXXXXXXX  X  XXX  X",
+-        "X X   X      X  X    X  X",
+-        "X X XXXXXXXX X  X X  X  X",
+-        "X X        X X  X X  X  X",
+-        "X XXXXXXXX X X  X X  X  X",
+-        "X        X X X  X    X  X",
+-        "XXXXXXX  X X X  X XXXX  X",
+-        "X     X  X X X  X    X  X",
+-        "X XXX X  X X X  XXXX X  X",
+-        "X X   X  X X X       X  X",
+-        "X X XXXXX     XXXXXXXX  X",
+-        "X X     X X X X         X",
+-        "X XXXXX X X X X  XXXXXXXX",
+-        "X     X X X X X         X",
+-        "XXXXX X X X X XXXXXXX   X",
+-        "X   X X X X X       X   X",
+-        "X X X X X X XXXXXXX X   X",
+-        "X X   X   X         X   X",
+-        "X XXXXXXXX XXXXXX       X",
+-        "X        X       X X    X",
+-        "X XXXXXXXX XXXXX X XXXX X",
+-        "X          X     X    E X",
+-        "XXXXXXXXXXXXXXXXXXXXXXXXX",
+-    ]),
+-    Level([
+-        "XXXXXXXXXXXXXXXXXXXXXXXXX",
+-        "XP   X     X     X     XX",
+-        "X X XXXX X XXXX X XXXX  X",
+-        "X X    X      X X    X  X",
+-        "X XXXX X XXXX XXXXXX X  X",
+-        "X    X X    X        X  X",
+-        "XXXX X XXXX X XXXX X X  X",
+-        "X    X    X X    X X X  X",
+-        "X XXXX XXXX X XXXX X X  X",
+-        "X X    X    X X    X X  X",
+-        "X X XXXX XXXX X XXXX X  X",
+-        "X X    X    X X    X X  X",
+-        "X XXXX X  XXX X XXXX X  X",
+-        "X    X X    X X    X X  X",
+-        "XXXX X XXXX X XXXX X X  X",
+-        "X    X    X X    X X X  X",
+-        "X XXXX XXXX X XXXX X X  X",
+-        "X X    X    X X    X X  X",
+-        "X X XXXX XXXX X XXXX X  X",
+-        "X X    X    X X    X X  X",
+-        "X XXXX X XXXX X XXXX X  X",
+-        "X    X X    X X    X X  X",
+-        "X XXXX X XXXX X XXXX X  X",
+-        "X            X     X  E X",
+-        "XXXXXXXXXXXXXXXXXXXXXXXXX",
+-    ]),
++    Level(["XXXXXXXXXXXXXXXXXXXXXXXXX", "XP  X    X              X", "X  X    X               X",
++           "X  X    X               X", "X       XXXXXXXXXXXXX   X", "XXXX                X   X",
++           "X      XXXXXXXXXXXXXX   X", "X   XXXX                X", "X   X             X     X",
++           "X   X             X     X", "X   X             X     X", "X   XXXXXXX       XXX   X",
++           "X         X         X   X", "X   XXXXXXXXXXX     X   X", "X             X     X   X",
++           "X   XXXXXXXXXXX     X   X", "X   X             XXXX  X", "X   XXXXXXXXXXX      X  X",
++           "X             X      X  X", "X    XXXXXXXXXX      X  X", "X                    X  X",
++           "XXXXXXXX    XXXXXXXXXX  X", "X      X    X           X", "X      XXXXXX           X",
++           "X                     E X", "XXXXXXXXXXXXXXXXXXXXXXXXX"]),
++    Level(["XXXXXXXXXXXXXXXXXXXXXXXXX", "XP     X        X       X", "X XXX XXXXXXXX  X  XXX  X",
++           "X X   X      X  X    X  X", "X X XXXXXXXX X  X X  X  X", "X X        X X  X X  X  X",
++           "X XXXXXXXX X X  X X  X  X", "X        X X X  X    X  X", "XXXXXXX  X X X  X XXXX  X",
++           "X     X  X X X  X    X  X", "X XXX X  X X X  XXXX X  X", "X X   X  X X X       X  X",
++           "X X XXXXX     XXXXXXXX  X", "X X     X X X X         X", "X XXXXX X X X X  XXXXXXXX",
++           "X     X X X X X         X", "XXXXX X X X X XXXXXXX   X", "X   X X X X X       X   X",
++           "X X X X X X XXXXXXX X   X", "X X   X   X         X   X", "X XXXXXXXX XXXXXX       X",
++           "X        X       X X    X", "X XXXXXXXX XXXXX X XXXX X", "X          X     X    E X",
++           "XXXXXXXXXXXXXXXXXXXXXXXXX"]),
++    Level(["XXXXXXXXXXXXXXXXXXXXXXXXX", "XP   X     X     X     XX", "X X XXXX X XXXX X XXXX  X",
++           "X X    X      X X    X  X", "X XXXX X XXXX XXXXXX X  X", "X    X X    X        X  X",
++           "XXXX X XXXX X XXXX X X  X", "X    X    X X    X X X  X", "X XXXX XXXX X XXXX X X  X",
++           "X X    X    X X    X X  X", "X X XXXX XXXX X XXXX X  X", "X X    X    X X    X X  X",
++           "X XXXX X  XXX X XXXX X  X", "X    X X    X X    X X  X", "XXXX X XXXX X XXXX X X  X",
++           "X    X    X X    X X X  X", "X XXXX XXXX X XXXX X X  X", "X X    X    X X    X X  X",
++           "X X XXXX XXXX X XXXX X  X", "X X    X    X X    X X  X", "X XXXX X XXXX X XXXX X  X",
++           "X    X X    X X    X X  X", "X XXXX X XXXX X XXXX X  X", "X            X     X  E X",
++           "XXXXXXXXXXXXXXXXXXXXXXXXX"])
+ ]
+\ No newline at end of file

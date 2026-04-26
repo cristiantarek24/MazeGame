@@ -6,7 +6,7 @@ class Pen(turtle.Turtle):
     def __init__(self):
         super().__init__()
         self.penup()
-        self.shape("square")
+        self.shape("Block.gif")
         self.color("white")
         self.speed(0)
 
@@ -15,16 +15,17 @@ class Pen(turtle.Turtle):
 class EndPoint(turtle.Turtle):
     def __init__(self):
         super().__init__()
-        self.shape("circle")
+        self.shape("door.gif")
         self.color("gold")
         self.shapesize(1.0, 1.0)
         self.penup()
         self.speed(0)
 
 
+
 # Represents the player character on the maze grid
 class Player(turtle.Turtle):
-    SHAPE = "square"
+    SHAPE = "elf_side01_idle.gif"
     COLOR = "blue"
 
     def __init__(self):
@@ -51,11 +52,17 @@ class Player(turtle.Turtle):
 
     def go_left(self, walls):
         new_x = self.xcor() - 24
+
+        self.shape("elf_side02_idle.gif")
+
         if self._can_move(new_x, self.ycor(), walls):
             self.goto(new_x, self.ycor())
 
     def go_right(self, walls):
         new_x = self.xcor() + 24
+
+        self.shape("elf_side01_idle.gif")
+
         if self._can_move(new_x, self.ycor(), walls):
             self.goto(new_x, self.ycor())
 

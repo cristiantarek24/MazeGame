@@ -1,0 +1,277 @@
+Index: run_game.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import sys\nimport os\nimport turtle\nimport tkinter as tk\nimport subprocess\nfrom Maze import levels, Pen, Player, EndPoint\n\n\n\ndef show_win_popup(window, pen, player, endpoint_turtle, level, level_index, win_shown):\n\n    canvas = window.getcanvas()\n    root = canvas.winfo_toplevel()\n\n    popup = tk.Toplevel(root)\n    popup.title(\"You Escaped!\")\n    popup.configure(bg=\"#050816\")\n    popup.resizable(False, False)\n    popup.grab_set()   # make it modal\n\n    W, H = 360, 340\n    rx = root.winfo_x() + (root.winfo_width()  - W) // 2\n    ry = root.winfo_y() + (root.winfo_height() - H) // 2\n    popup.geometry(f\"{W}x{H}+{rx}+{ry}\")\n\n    card = tk.Frame(\n        popup,\n        bg=\"#0f1829\",\n        highlightthickness=2,\n        highlightbackground=\"#f59e0b\",\n        bd=0,\n    )\n    card.place(relx=0.5, rely=0.5, anchor=\"center\", width=320, height=310)\n\n    # Trophy emoji\n    tk.Label(\n        card,\n        text=\"\uD83C\uDFC6\",\n        font=(\"Arial\", 46),\n        bg=\"#0f1829\",\n        fg=\"gold\",\n    ).pack(pady=(18, 0))\n\n    # Headline\n    tk.Label(\n        card,\n        text=\"YOU ESCAPED!\",\n        font=(\"Arial\", 20, \"bold\"),\n        bg=\"#0f1829\",\n        fg=\"#ffffff\",\n    ).pack(pady=(0, 2))\n\n    # Sub-line\n    tk.Label(\n        card,\n        text=\"The maze bows before you.\",\n        font=(\"Arial\", 10, \"italic\"),\n        bg=\"#0f1829\",\n        fg=\"#64748b\",\n    ).pack(pady=(0, 16))\n\n    def make_btn(parent, text, command, bg=\"#1e2d50\", hover=\"#2d4070\"):\n        btn = tk.Button(\n            parent,\n            text=text,\n            command=command,\n            bg=bg,\n            fg=\"#ffffff\",\n            activebackground=hover,\n            activeforeground=\"#ffffff\",\n            relief=\"flat\",\n            bd=0,\n            highlightthickness=0,\n            padx=0,\n            pady=10,\n            cursor=\"hand2\",\n            font=(\"Arial\", 12, \"bold\"),\n            width=22,\n        )\n        btn.bind(\"<Enter>\", lambda _: btn.configure(bg=hover))\n        btn.bind(\"<Leave>\", lambda _: btn.configure(bg=bg))\n        return btn\n\n\n\n    def play_again():\n        win_shown[0] = False\n        popup.destroy()\n        window.tracer(0)\n        pen.clearstamps()\n        level.draw(pen, player, endpoint_turtle)\n        window.update()\n        window.tracer(1)\n\n    def choose_level():\n        popup.destroy()\n        window.getcanvas().winfo_toplevel().destroy()\n        sys.exit(2)\n\n    def exit_game():\n        popup.destroy()\n        window.getcanvas().winfo_toplevel().destroy()\n        sys.exit(0)\n\n\n    btn_frame = tk.Frame(card, bg=\"#0f1829\")\n    btn_frame.pack()\n\n    make_btn(btn_frame, \"▶   Play Again\",       play_again,   bg=\"#7c3aed\", hover=\"#6d28d9\").pack(pady=4)\n    make_btn(btn_frame, \"   Choose Another Level\", choose_level, bg=\"#1e2d50\", hover=\"#2d4070\").pack(pady=4)\n    make_btn(btn_frame, \"✕   Exit\",              exit_game,    bg=\"#450a0a\", hover=\"#7f1d1d\").pack(pady=4)\n\n\n# ── Main game loop ────────────────────────────────────────────────────────────\n\ndef main():\n    level_index = int(sys.argv[1])\n\n    window = turtle.Screen()\n    window.bgcolor(\"#050816\")\n    window.title(\"Escape the Maze\")\n    window.setup(width=700, height=700)\n\n    pen            = Pen()\n    player         = Player()\n    endpoint_turtle = EndPoint()\n\n    level = levels[level_index]\n\n    # Draw everything at once (faster, no tile-by-tile animation)\n    window.tracer(0)\n    level.draw(pen, player, endpoint_turtle)\n    window.update()\n    window.tracer(1)\n\n    win_shown = [False]   # mutable flag so closures can reset it\n\n    def check_win():\n        if win_shown[0] or level.endpoint is None:\n            return\n        px = round(player.xcor())\n        py = round(player.ycor())\n        ex, ey = level.endpoint\n        if px == ex and py == ey:\n            win_shown[0] = True\n            show_win_popup(window, pen, player, endpoint_turtle,\n                           level, level_index, win_shown)\n\n    def move(action):\n        action()\n        check_win()\n\n    window.listen()\n    window.onkey(lambda: move(lambda: player.go_up(level.walls)),    \"Up\")\n    window.onkey(lambda: move(lambda: player.go_down(level.walls)),  \"Down\")\n    window.onkey(lambda: move(lambda: player.go_left(level.walls)),  \"Left\")\n    window.onkey(lambda: move(lambda: player.go_right(level.walls)), \"Right\")\n\n    turtle.done()\n\n\nif __name__ == \"__main__\":\n    main()
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/run_game.py b/run_game.py
+--- a/run_game.py	(revision 94d11de5abe6f8ee910e5715250e88a870b9b163)
++++ b/run_game.py	(date 1777165393944)
+@@ -2,86 +2,21 @@
+ import os
+ import turtle
+ import tkinter as tk
+-import subprocess
+ from Maze import levels, Pen, Player, EndPoint
+ 
+ 
+-
+ def show_win_popup(window, pen, player, endpoint_turtle, level, level_index, win_shown):
+-
+-    canvas = window.getcanvas()
+-    root = canvas.winfo_toplevel()
+-
++    root = window.getcanvas().winfo_toplevel()
+     popup = tk.Toplevel(root)
+-    popup.title("You Escaped!")
++    popup.title("Success!")
+     popup.configure(bg="#050816")
+-    popup.resizable(False, False)
+-    popup.grab_set()   # make it modal
+-
+-    W, H = 360, 340
+-    rx = root.winfo_x() + (root.winfo_width()  - W) // 2
+-    ry = root.winfo_y() + (root.winfo_height() - H) // 2
+-    popup.geometry(f"{W}x{H}+{rx}+{ry}")
+-
+-    card = tk.Frame(
+-        popup,
+-        bg="#0f1829",
+-        highlightthickness=2,
+-        highlightbackground="#f59e0b",
+-        bd=0,
+-    )
+-    card.place(relx=0.5, rely=0.5, anchor="center", width=320, height=310)
+-
+-    # Trophy emoji
+-    tk.Label(
+-        card,
+-        text="🏆",
+-        font=("Arial", 46),
+-        bg="#0f1829",
+-        fg="gold",
+-    ).pack(pady=(18, 0))
+-
+-    # Headline
+-    tk.Label(
+-        card,
+-        text="YOU ESCAPED!",
+-        font=("Arial", 20, "bold"),
+-        bg="#0f1829",
+-        fg="#ffffff",
+-    ).pack(pady=(0, 2))
++    popup.geometry("300x250")
+ 
+-    # Sub-line
+-    tk.Label(
+-        card,
+-        text="The maze bows before you.",
+-        font=("Arial", 10, "italic"),
+-        bg="#0f1829",
+-        fg="#64748b",
+-    ).pack(pady=(0, 16))
++    card = tk.Frame(popup, bg="#0f1829", highlightthickness=1, highlightbackground="gold")
++    card.pack(fill="both", expand=True, padx=10, pady=10)
+ 
+-    def make_btn(parent, text, command, bg="#1e2d50", hover="#2d4070"):
+-        btn = tk.Button(
+-            parent,
+-            text=text,
+-            command=command,
+-            bg=bg,
+-            fg="#ffffff",
+-            activebackground=hover,
+-            activeforeground="#ffffff",
+-            relief="flat",
+-            bd=0,
+-            highlightthickness=0,
+-            padx=0,
+-            pady=10,
+-            cursor="hand2",
+-            font=("Arial", 12, "bold"),
+-            width=22,
+-        )
+-        btn.bind("<Enter>", lambda _: btn.configure(bg=hover))
+-        btn.bind("<Leave>", lambda _: btn.configure(bg=bg))
+-        return btn
+-
+-
++    tk.Label(card, text="🏆", font=("Arial", 30), bg="#0f1829", fg="gold").pack(pady=10)
++    tk.Label(card, text="YOU ESCAPED!", font=("Arial", 14, "bold"), bg="#0f1829", fg="white").pack()
+ 
+     def play_again():
+         win_shown[0] = False
+@@ -92,69 +27,45 @@
+         window.update()
+         window.tracer(1)
+ 
+-    def choose_level():
++    def exit_to_menu():
+         popup.destroy()
+         window.getcanvas().winfo_toplevel().destroy()
+         sys.exit(2)
+ 
+-    def exit_game():
+-        popup.destroy()
+-        window.getcanvas().winfo_toplevel().destroy()
+-        sys.exit(0)
+-
+-
+-    btn_frame = tk.Frame(card, bg="#0f1829")
+-    btn_frame.pack()
+-
+-    make_btn(btn_frame, "▶   Play Again",       play_again,   bg="#7c3aed", hover="#6d28d9").pack(pady=4)
+-    make_btn(btn_frame, "   Choose Another Level", choose_level, bg="#1e2d50", hover="#2d4070").pack(pady=4)
+-    make_btn(btn_frame, "✕   Exit",              exit_game,    bg="#450a0a", hover="#7f1d1d").pack(pady=4)
++    tk.Button(card, text="Play Again", command=play_again, bg="#7c3aed", fg="white", width=15).pack(pady=5)
++    tk.Button(card, text="Menu", command=exit_to_menu, bg="#1e2d50", fg="white", width=15).pack(pady=5)
+ 
+-
+-# ── Main game loop ────────────────────────────────────────────────────────────
+ 
+ def main():
+     level_index = int(sys.argv[1])
+-
+     window = turtle.Screen()
+     window.bgcolor("#050816")
+-    window.title("Escape the Maze")
+-    window.setup(width=700, height=700)
++    window.setup(700, 700)
++    window.title("Maze Game")
+ 
+-    pen            = Pen()
+-    player         = Player()
++    pen = Pen()
++    player = Player()
+     endpoint_turtle = EndPoint()
+-
+     level = levels[level_index]
+ 
+-    # Draw everything at once (faster, no tile-by-tile animation)
+     window.tracer(0)
+     level.draw(pen, player, endpoint_turtle)
+     window.update()
+     window.tracer(1)
+ 
+-    win_shown = [False]   # mutable flag so closures can reset it
++    win_shown = [False]
+ 
+     def check_win():
+-        if win_shown[0] or level.endpoint is None:
+-            return
+-        px = round(player.xcor())
+-        py = round(player.ycor())
+-        ex, ey = level.endpoint
+-        if px == ex and py == ey:
+-            win_shown[0] = True
+-            show_win_popup(window, pen, player, endpoint_turtle,
+-                           level, level_index, win_shown)
+-
+-    def move(action):
+-        action()
+-        check_win()
++        if not win_shown[0] and level.endpoint:
++            if round(player.xcor()) == level.endpoint[0] and round(player.ycor()) == level.endpoint[1]:
++                win_shown[0] = True
++                show_win_popup(window, pen, player, endpoint_turtle, level, level_index, win_shown)
+ 
+     window.listen()
+-    window.onkey(lambda: move(lambda: player.go_up(level.walls)),    "Up")
+-    window.onkey(lambda: move(lambda: player.go_down(level.walls)),  "Down")
+-    window.onkey(lambda: move(lambda: player.go_left(level.walls)),  "Left")
+-    window.onkey(lambda: move(lambda: player.go_right(level.walls)), "Right")
++    window.onkey(lambda: [player.go_up(level.walls), check_win()], "Up")
++    window.onkey(lambda: [player.go_down(level.walls), check_win()], "Down")
++    window.onkey(lambda: [player.go_left(level.walls), check_win()], "Left")
++    window.onkey(lambda: [player.go_right(level.walls), check_win()], "Right")
+ 
+     turtle.done()
+ 
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"AutoImportSettings\">\n    <option name=\"autoReloadType\" value=\"ALL\" />\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"2235adde-4024-4407-ac40-b9dab13a75ca\" name=\"Changes\" comment=\"add BFS, DFS, and A* algorithms\" />\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"EmbeddingIndexingInfo\">\n    <option name=\"cachedIndexableFilesCount\" value=\"9\" />\n    <option name=\"fileBasedEmbeddingIndicesEnabled\" value=\"true\" />\n  </component>\n  <component name=\"FileTemplateManagerImpl\">\n    <option name=\"RECENT_TEMPLATES\">\n      <list>\n        <option value=\"Python Script\" />\n      </list>\n    </option>\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\n      <map>\n        <entry key=\"$PROJECT_DIR$\" value=\"main\" />\n      </map>\n    </option>\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"GitHubPullRequestSearchHistory\">{\n  &quot;lastFilter&quot;: {\n    &quot;state&quot;: &quot;OPEN&quot;,\n    &quot;assignee&quot;: &quot;cristiantarek24&quot;\n  }\n}</component>\n  <component name=\"GithubPullRequestsUISettings\"><![CDATA[{\n  \"selectedUrlAndAccountId\": {\n    \"url\": \"https://github.com/cristiantarek24/MazeGame.git\",\n    \"accountId\": \"86897ebd-591c-45e2-957f-a7a6c9e1e3ae\"\n  },\n  \"recentNewPullRequestHead\": {\n    \"server\": {\n      \"useHttp\": false,\n      \"host\": \"github.com\",\n      \"port\": null,\n      \"suffix\": null\n    },\n    \"owner\": \"cristiantarek24\",\n    \"repository\": \"MazeGame\"\n  }\n}]]></component>\n  <component name=\"McpProjectServerCommands\">\n    <commands />\n    <urls />\n  </component>\n  <component name=\"ProjectColorInfo\">{\n  &quot;associatedIndex&quot;: 2\n}</component>\n  <component name=\"ProjectId\" id=\"3CkFDmyBUESuoCInI3KGKMyB3jR\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\"><![CDATA[{\n  \"keyToString\": {\n    \"ModuleVcsDetector.initialDetectionPerformed\": \"true\",\n    \"Python.Maze.executor\": \"Run\",\n    \"Python.main.executor\": \"Run\",\n    \"Python.search_algorithms.executor\": \"Run\",\n    \"RunOnceActivity.MCP Project settings loaded\": \"true\",\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\n    \"RunOnceActivity.git.unshallow\": \"true\",\n    \"RunOnceActivity.typescript.service.memoryLimit.init\": \"true\",\n    \"codeWithMe.voiceChat.enabledByDefault\": \"false\",\n    \"com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1\": \"true\",\n    \"git-widget-placeholder\": \"feature/search__algorithms\",\n    \"ignore.virus.scanning.warn.message\": \"true\",\n    \"junie.onboarding.icon.badge.shown\": \"true\",\n    \"last_opened_file_path\": \"C:/Users/hp/PycharmProjects/MazeGame\",\n    \"node.js.detected.package.eslint\": \"true\",\n    \"node.js.detected.package.tslint\": \"true\",\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\n    \"nodejs_package_manager_path\": \"npm\",\n    \"settings.editor.selected.configurable\": \"preferences.lookFeel\",\n    \"to.speed.mode.migration.done\": \"true\",\n    \"vue.rearranger.settings.migration\": \"true\"\n  }\n}]]></component>\n  <component name=\"RecentsManager\">\n    <key name=\"CopyFile.RECENT_KEYS\">\n      <recent name=\"C:\\Users\\hp\\PycharmProjects\\MazeGame\" />\n    </key>\n  </component>\n  <component name=\"RunManager\">\n    <configuration name=\"search_algorithms\" type=\"PythonConfigurationType\" factoryName=\"Python\" temporary=\"true\" nameIsGenerated=\"true\">\n      <module name=\"MazeGame\" />\n      <option name=\"ENV_FILES\" value=\"\" />\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\n      <option name=\"PARENT_ENVS\" value=\"true\" />\n      <envs>\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\n      </envs>\n      <option name=\"SDK_HOME\" value=\"\" />\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$\" />\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\n      <option name=\"DEBUG_JUST_MY_CODE\" value=\"false\" />\n      <option name=\"RUN_TOOL\" value=\"\" />\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/search_algorithms.py\" />\n      <option name=\"PARAMETERS\" value=\"\" />\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\n      <option name=\"MODULE_MODE\" value=\"false\" />\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\n      <option name=\"INPUT_FILE\" value=\"\" />\n      <method v=\"2\" />\n    </configuration>\n    <recent_temporary>\n      <list>\n        <item itemvalue=\"Python.search_algorithms\" />\n      </list>\n    </recent_temporary>\n  </component>\n  <component name=\"SharedIndexes\">\n    <attachedChunks>\n      <set>\n        <option value=\"bundled-python-sdk-b63d5a1f7c97-b61e75351b1f-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-261.22158.340\" />\n      </set>\n    </attachedChunks>\n  </component>\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"2235adde-4024-4407-ac40-b9dab13a75ca\" name=\"Changes\" comment=\"\" />\n      <created>1776921543611</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1776921543611</updated>\n      <workItem from=\"1776921544608\" duration=\"2377000\" />\n      <workItem from=\"1776999851545\" duration=\"8259000\" />\n      <workItem from=\"1777051915120\" duration=\"10989000\" />\n    </task>\n    <task id=\"LOCAL-00001\" summary=\"intial commit\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1776922126051</created>\n      <option name=\"number\" value=\"00001\" />\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1776922126051</updated>\n    </task>\n    <task id=\"LOCAL-00002\" summary=\"Generate level setup (level 1)\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1777003188375</created>\n      <option name=\"number\" value=\"00002\" />\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1777003188375</updated>\n    </task>\n    <task id=\"LOCAL-00003\" summary=\"Generate level setup (level 1)\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1777005052316</created>\n      <option name=\"number\" value=\"00003\" />\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1777005052316</updated>\n    </task>\n    <task id=\"LOCAL-00004\" summary=\"Generate main menu and level selection system\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1777009049364</created>\n      <option name=\"number\" value=\"00004\" />\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1777009049364</updated>\n    </task>\n    <task id=\"LOCAL-00005\" summary=\"Edit on level 2 , 3\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1777053043810</created>\n      <option name=\"number\" value=\"00005\" />\n      <option name=\"presentableId\" value=\"LOCAL-00005\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1777053043810</updated>\n    </task>\n    <task id=\"LOCAL-00006\" summary=\"Add the key bindings for player movement\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1777055576392</created>\n      <option name=\"number\" value=\"00006\" />\n      <option name=\"presentableId\" value=\"LOCAL-00006\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1777055576392</updated>\n    </task>\n    <task id=\"LOCAL-00007\" summary=\"Fixing the errors in the closing\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1777056770905</created>\n      <option name=\"number\" value=\"00007\" />\n      <option name=\"presentableId\" value=\"LOCAL-00007\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1777056770905</updated>\n    </task>\n    <task id=\"LOCAL-00008\" summary=\"Add a collision detection mechanism\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1777064957935</created>\n      <option name=\"number\" value=\"00008\" />\n      <option name=\"presentableId\" value=\"LOCAL-00008\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1777064957935</updated>\n    </task>\n    <task id=\"LOCAL-00009\" summary=\"add BFS, DFS, and A* algorithms\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1777135495230</created>\n      <option name=\"number\" value=\"00009\" />\n      <option name=\"presentableId\" value=\"LOCAL-00009\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1777135495230</updated>\n    </task>\n    <task id=\"LOCAL-00010\" summary=\"add BFS, DFS, and A* algorithms\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1777135565330</created>\n      <option name=\"number\" value=\"00010\" />\n      <option name=\"presentableId\" value=\"LOCAL-00010\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1777135565330</updated>\n    </task>\n    <option name=\"localTasksCounter\" value=\"11\" />\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n  <component name=\"Vcs.Log.Tabs.Properties\">\n    <option name=\"TAB_STATES\">\n      <map>\n        <entry key=\"MAIN\">\n          <value>\n            <State />\n          </value>\n        </entry>\n      </map>\n    </option>\n  </component>\n  <component name=\"VcsManagerConfiguration\">\n    <MESSAGE value=\"intial commit\" />\n    <MESSAGE value=\"Generate level setup (level 1)\" />\n    <MESSAGE value=\"Generate main menu and level selection system\" />\n    <MESSAGE value=\"Edit on level 2 , 3\" />\n    <MESSAGE value=\"Add the key bindings for player movement\" />\n    <MESSAGE value=\"Fixing the errors in the closing\" />\n    <MESSAGE value=\"Add a collision detection mechanism\" />\n    <MESSAGE value=\"add BFS, DFS, and A* algorithms\" />\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"add BFS, DFS, and A* algorithms\" />\n  </component>\n  <component name=\"com.intellij.coverage.CoverageDataManagerImpl\">\n    <SUITE FILE_PATH=\"coverage/MazeGame$Maze.coverage\" NAME=\"Maze Coverage Results\" MODIFIED=\"1777063171818\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\n    <SUITE FILE_PATH=\"coverage/MazeGame$main.coverage\" NAME=\"main Coverage Results\" MODIFIED=\"1777067297523\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 94d11de5abe6f8ee910e5715250e88a870b9b163)
++++ b/.idea/workspace.xml	(date 1777165386260)
+@@ -4,7 +4,11 @@
+     <option name="autoReloadType" value="ALL" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="2235adde-4024-4407-ac40-b9dab13a75ca" name="Changes" comment="add BFS, DFS, and A* algorithms" />
++    <list default="true" id="2235adde-4024-4407-ac40-b9dab13a75ca" name="Changes" comment="add BFS, DFS, and A* algorithms">
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Maze.py" beforeDir="false" afterPath="$PROJECT_DIR$/Maze.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/run_game.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_game.py" afterDir="false" />
++    </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+@@ -35,22 +39,22 @@
+     &quot;assignee&quot;: &quot;cristiantarek24&quot;
+   }
+ }</component>
+-  <component name="GithubPullRequestsUISettings"><![CDATA[{
+-  "selectedUrlAndAccountId": {
+-    "url": "https://github.com/cristiantarek24/MazeGame.git",
+-    "accountId": "86897ebd-591c-45e2-957f-a7a6c9e1e3ae"
++  <component name="GithubPullRequestsUISettings">{
++  &quot;selectedUrlAndAccountId&quot;: {
++    &quot;url&quot;: &quot;https://github.com/cristiantarek24/MazeGame.git&quot;,
++    &quot;accountId&quot;: &quot;86897ebd-591c-45e2-957f-a7a6c9e1e3ae&quot;
+   },
+-  "recentNewPullRequestHead": {
+-    "server": {
+-      "useHttp": false,
+-      "host": "github.com",
+-      "port": null,
+-      "suffix": null
++  &quot;recentNewPullRequestHead&quot;: {
++    &quot;server&quot;: {
++      &quot;useHttp&quot;: false,
++      &quot;host&quot;: &quot;github.com&quot;,
++      &quot;port&quot;: null,
++      &quot;suffix&quot;: null
+     },
+-    "owner": "cristiantarek24",
+-    "repository": "MazeGame"
++    &quot;owner&quot;: &quot;cristiantarek24&quot;,
++    &quot;repository&quot;: &quot;MazeGame&quot;
+   }
+-}]]></component>
++}</component>
+   <component name="McpProjectServerCommands">
+     <commands />
+     <urls />
+@@ -75,7 +79,7 @@
+     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+     "codeWithMe.voiceChat.enabledByDefault": "false",
+     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+-    "git-widget-placeholder": "feature/search__algorithms",
++    "git-widget-placeholder": "Adding-character",
+     "ignore.virus.scanning.warn.message": "true",
+     "junie.onboarding.icon.badge.shown": "true",
+     "last_opened_file_path": "C:/Users/hp/PycharmProjects/MazeGame",
+@@ -109,6 +113,7 @@
+       <option name="ADD_CONTENT_ROOTS" value="true" />
+       <option name="ADD_SOURCE_ROOTS" value="true" />
+       <option name="DEBUG_JUST_MY_CODE" value="false" />
++      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+       <option name="RUN_TOOL" value="" />
+       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/search_algorithms.py" />
+       <option name="PARAMETERS" value="" />
+@@ -253,6 +258,8 @@
+   </component>
+   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+     <SUITE FILE_PATH="coverage/MazeGame$Maze.coverage" NAME="Maze Coverage Results" MODIFIED="1777063171818" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+-    <SUITE FILE_PATH="coverage/MazeGame$main.coverage" NAME="main Coverage Results" MODIFIED="1777067297523" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
++    <SUITE FILE_PATH="coverage/MazeGame$main.coverage" NAME="main Coverage Results" MODIFIED="1777165341788" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
++    <SUITE FILE_PATH="coverage/MazeGame$run_game.coverage" NAME="run_game Coverage Results" MODIFIED="1777162213280" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
++    <SUITE FILE_PATH="coverage/MazeGame$search_algorithms.coverage" NAME="search_algorithms Coverage Results" MODIFIED="1777163328104" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+   </component>
+ </project>
+\ No newline at end of file

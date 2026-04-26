@@ -3,7 +3,7 @@ import subprocess
 import sys
 import os
 
-from Maze import levels
+
 
 
 # Tkinter level-select menu shown before the game starts
@@ -115,6 +115,7 @@ class Menu:
     # Destroys the menu and launches the selected level in a separate process
     def _start_level(self, level_index):
         self.root.withdraw()
+        from Maze import levels
         script_dir = os.path.dirname(os.path.abspath(__file__))
         proc = subprocess.Popen([
             sys.executable,
