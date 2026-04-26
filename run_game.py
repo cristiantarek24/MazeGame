@@ -1,4 +1,5 @@
 import sys
+import pygame
 import os
 import turtle
 import tkinter as tk
@@ -67,6 +68,7 @@ def show_win_popup(window, pen, player, endpoint_turtle, level, level_index, win
     def play_again():
         win_shown[0] = False
         popup.destroy()
+        pygame.mixer.music.play(-1)
         window.tracer(0)
         pen.clearstamps()
         level.draw(pen, player, endpoint_turtle)
@@ -74,21 +76,34 @@ def show_win_popup(window, pen, player, endpoint_turtle, level, level_index, win
         window.tracer(1)
         _set_buttons_state(solver_buttons, "normal")
 
-    def choose_level():
-        popup.destroy()
-        window.getcanvas().winfo_toplevel().destroy()
-        sys.exit(2)
-
     def exit_game():
+        pygame.mixer.music.stop()
         popup.destroy()
         window.getcanvas().winfo_toplevel().destroy()
         sys.exit(0)
+
+    def choose_level():
+        pygame.mixer.music.stop()
+        popup.destroy()
+        window.getcanvas().winfo_toplevel().destroy()
+        sys.exit(2)
 
     tk.Button(card, text="Play Again", command=play_again, bg="#7c3aed", fg="white", width=22, pady=10).pack(pady=4)
     tk.Button(card, text="Choose Level", command=choose_level, bg="#1e2d50", fg="white", width=22, pady=10).pack(pady=4)
     tk.Button(card, text="Exit", command=exit_game, bg="#450a0a", fg="white", width=22, pady=10).pack(pady=4)
 
 def main():
+    pygame.mixer.init()
+    pygame.mixer.music.load(os.path.join("game.mp3"))
+    pygame.mixer.music.set_volume(0.4)
+    pygame.mixer.music.play(-1)
+
+    step_sound = pygame.mixer.Sound(os.path.join("step.wav"))
+    step_sound.set_volume(0.1)
+
+    win_sound = pygame.mixer.Sound(os.path.join("win.wav"))
+    win_sound.set_volume(0.8)
+
     if len(sys.argv) < 2:
         return
     level_index = int(sys.argv[1])
@@ -124,12 +139,17 @@ def main():
         if not win_shown[0] and level.endpoint:
             if (round(player.xcor()), round(player.ycor())) == level.endpoint:
                 win_shown[0] = True
+                pygame.mixer.music.stop()
+                win_sound.play()
                 _set_buttons_state(solver_buttons, "disabled")
                 show_win_popup(window, pen, player, endpoint_turtle, level, level_index, win_shown, solver_buttons)
 
     def move(action):
         if not win_shown[0]:
+            prev = (round(player.xcor()), round(player.ycor()))
             action()
+            if (round(player.xcor()), round(player.ycor())) != prev:
+                step_sound.play()
             check_win()
 
     window.listen()
