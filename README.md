@@ -81,7 +81,7 @@ pip install pygame
 ## 🚀 How to Run
 
 ```bash
-python Menu.py
+python main.py
 ```
 
 1. The level select menu will appear
